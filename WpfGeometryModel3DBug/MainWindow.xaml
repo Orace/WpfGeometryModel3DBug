@@ -1,0 +1,153 @@
+﻿<Window x:Class="WpfGeometryModel3DBug.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <Window.Resources>
+        <ImageBrush x:Key="NoTileImageBrush"
+                    ImageSource="/Resources/texture.png"
+                    TileMode="None"
+                    ViewportUnits="Absolute" />
+
+        <ImageBrush x:Key="TiledImageBrush"
+                    ImageSource="/Resources/texture.png"
+                    TileMode="Tile"
+                    ViewportUnits="Absolute" />
+
+        <DiffuseMaterial x:Key="NoTileMaterial"
+                         Brush="{StaticResource NoTileImageBrush}" />
+
+        <DiffuseMaterial x:Key="TiledMaterial"
+                         Brush="{StaticResource TiledImageBrush}" />
+
+        <OrthographicCamera x:Key="OrthographicCamera"
+                            FarPlaneDistance="3"
+                            NearPlaneDistance="1"
+                            Position="0 0 2"
+                            LookDirection="0 0 -1"
+                            Width="4"/>
+
+        <Point3DCollection x:Key="Positions">-1,-1,0 -1,+1,0 +1,+1,0 +1,-1,0</Point3DCollection>
+        <Int32Collection x:Key="TriangleIndices">0 2 1 3 2 0</Int32Collection>
+        <PointCollection x:Key="LeftLineTextureCoordinates">0,0 0,1 0,1 0,0</PointCollection>
+        <PointCollection x:Key="FullTextureCoordinates">0,0 0,1 1,1 1,0</PointCollection>
+
+        <MeshGeometry3D x:Key="LeftLineMesh"
+                        Positions="{StaticResource Positions}"
+                        TriangleIndices="{StaticResource TriangleIndices}"
+                        TextureCoordinates="{StaticResource LeftLineTextureCoordinates}" />
+
+        <MeshGeometry3D x:Key="FullTextureMesh"
+                        Positions="{StaticResource Positions}"
+                        TriangleIndices="{StaticResource TriangleIndices}"
+                        TextureCoordinates="{StaticResource FullTextureCoordinates}" />
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0"
+               Grid.Column="1"
+               Content="Texture viewport: [0, 1]×[0, 1]"
+               HorizontalAlignment="Center"/>
+
+        <Label Grid.Row="0"
+               Grid.Column="2"
+               Content="Texture viewport: {0}×[0, 1]"
+               HorizontalAlignment="Center"/>
+
+        <Label Grid.Row="1"
+               Grid.Column="0"
+               Content="TileMode=&quot;None&quot;"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Right" />
+
+        <Viewport3D Grid.Row="1"
+                    Grid.Column="1"
+                    Camera="{StaticResource OrthographicCamera}">
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <AmbientLight />
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <GeometryModel3D Geometry="{StaticResource FullTextureMesh}"
+                                     Material="{StaticResource NoTileMaterial}" />
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+        </Viewport3D>
+
+        <Viewport3D Grid.Row="1"
+                    Grid.Column="2"
+                    Camera="{StaticResource OrthographicCamera}">
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <AmbientLight />
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <GeometryModel3D Geometry="{StaticResource LeftLineMesh}"
+                                     Material="{StaticResource NoTileMaterial}" />
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+        </Viewport3D>
+
+        <Label Grid.Row="2"
+               Grid.Column="0"
+               Content="TileMode=&quot;Tile&quot;"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Right" />
+
+        <Viewport3D Grid.Row="2"
+                    Grid.Column="1"
+                    Camera="{StaticResource OrthographicCamera}">
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <AmbientLight />
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <GeometryModel3D Geometry="{StaticResource FullTextureMesh}"
+                                     Material="{StaticResource TiledMaterial}" />
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+        </Viewport3D>
+
+        <Viewport3D Grid.Row="2"
+                    Grid.Column="2"
+                    Camera="{StaticResource OrthographicCamera}">
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <AmbientLight />
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <GeometryModel3D Geometry="{StaticResource LeftLineMesh}"
+                                     Material="{StaticResource TiledMaterial}" />
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+        </Viewport3D>
+    </Grid>
+</Window>
